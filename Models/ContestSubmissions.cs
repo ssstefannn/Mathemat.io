@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mathemat.io.Models
 {
@@ -9,6 +10,9 @@ namespace Mathemat.io.Models
         public int ProblemID { get; set; }
 
         public int ContestantID { get; set; }
+
+        [NotMapped]
+        public IFormFile? SolutionFile { get; set; }
 
         public string? Solution { get; set; }
 

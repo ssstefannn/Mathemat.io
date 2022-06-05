@@ -1,0 +1,34 @@
+﻿@model Mathemat.io.Models.ContestSubmissions
+@{
+    ViewData["Title"] = "Submit";
+}
+
+<h1>Submit</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Contests" asp-action="SubmitConfirmed" asp-route-id="@Model.ContestID" asp-route-problemId="@Model.ProblemID" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ContestID" />
+            <input type="hidden" asp-for="ProblemID" />
+            <input type="hidden" asp-for="ContestantID" />
+            <div class="form-group">
+                <label asp-for="SolutionFile" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="SolutionFile" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile"></label>
+                </div>
+                <span asp-validation-for="SolutionFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Start" asp-route-id="@Model.ContestID">Back</a>
+</div>
+

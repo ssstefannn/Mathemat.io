@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mathemat.io.Models
 {
@@ -29,6 +30,12 @@ namespace Mathemat.io.Models
         public IEnumerable<ProblemAreas>? Areas { get; set; }
 
         public IEnumerable<ProblemAuthors>? Authors { get; set; }
+
+        [NotMapped]
+        public IEnumerable<int>? AreaIDs { get; set; }
+
+        [NotMapped]
+        public IEnumerable<int>? AuthorIDs { get; set; }
 
 
     }

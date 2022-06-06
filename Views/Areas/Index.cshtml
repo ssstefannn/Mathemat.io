@@ -33,7 +33,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AreaID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.AreaID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AreaID">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.AreaID">Delete</a> |
+                <a asp-controller="Problems" asp-action="Index" asp-route-areaName="@item.Name">Problems</a>
             </td>
         </tr>
 }

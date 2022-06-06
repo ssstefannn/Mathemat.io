@@ -27,10 +27,25 @@ namespace Mathematio.Controllers
         }
 
         // GET: Problems
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? title,int? difficulty,string? areaName)
         {
+            var filteredProblems = _context.Problems.AsQueryable();
+            if(title != null)
+            {
+                filteredProblems = filteredProblems.Where(p => p.Title.Contains(title));
+            }
+            if(difficulty != null)
+            {
+                filteredProblems = filteredProblems.Where(p => (int)p.Difficulty == difficulty);
+            }
+            if(areaName != null)
+            {
+                int areaID = _context.Areas.First(a => a.Name.Equals(areaName)).AreaID;
+                var problemAreas = _context.ProblemAreas.Where(pa => pa.AreaID == areaID);
+                filteredProblems = problemAreas.Join<ProblemAreas,Problem,int,Problem>(filteredProblems, pa => pa.ProblemID, p => p.ProblemId,(pa,p)=>p);
+            }
               return _context.Problems != null ? 
-                          View(await _context.Problems.ToListAsync()) :
+                          View(await filteredProblems.ToListAsync()) :
                           Problem("Entity set 'MathematioContext.Problems'  is null.");
         }
 

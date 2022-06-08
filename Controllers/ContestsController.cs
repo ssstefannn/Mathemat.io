@@ -251,5 +251,19 @@ namespace Mathematio.Controllers
             }
             return uniqueFileName;
         }
+
+        public async Task<IActionResult> Submissions(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var submissions = await _context.ContestSubmissions.Where(cs => cs.ContestID == id).Include(cs=>cs.Contest).Include(cs=>cs.Problem).Include(cs=>cs.Contestant).ToListAsync();
+
+            return View(submissions);
+
+
+        }
     }
 }

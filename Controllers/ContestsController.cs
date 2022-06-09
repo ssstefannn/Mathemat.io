@@ -285,5 +285,22 @@ namespace Mathematio.Controllers
 
             return NotFound();
         }
+
+        public async Task<IActionResult> Results(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var test = _context.ContestSubmissions.Where(cs => cs.ContestID == id).ToList().GroupBy(li => li.ContestantID).Select(ge => new ContestSubmissions
+            {
+                ContestID = (int)id,
+                ProblemID = 0,
+                ContestantID = ge.Key,
+                Contestant = _context.Contestants.Where(c=>c.ContestantID == ge.Key).First(),
+                Points = ge.Select(submission => submission.Points).Sum()
+            }).OrderBy(cs => -1*cs.Points); 
+            return View(test);
+        }
     }
 }

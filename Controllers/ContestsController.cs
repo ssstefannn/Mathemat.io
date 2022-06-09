@@ -214,7 +214,7 @@ namespace Mathematio.Controllers
 
         [HttpPost]
         [Route("Contests/SubmitConfirmed/{id:int}/{problemId:int}")]
-        public async Task<IActionResult> SubmitConfirmed(int? id, int? problemId,[Bind("ContestID","ProblemID","ContestantID","Solution","SolutionFile")]ContestSubmissions submission)
+        public async Task<IActionResult> SubmitConfirmed(int? id, int? problemId, [Bind("ContestID", "ProblemID", "ContestantID", "Solution", "SolutionFile")] ContestSubmissions submission)
         {
             if (submission.SolutionFile != null)
             {
@@ -254,16 +254,36 @@ namespace Mathematio.Controllers
 
         public async Task<IActionResult> Submissions(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var submissions = await _context.ContestSubmissions.Where(cs => cs.ContestID == id).Include(cs=>cs.Contest).Include(cs=>cs.Problem).Include(cs=>cs.Contestant).ToListAsync();
+            var submissions = await _context.ContestSubmissions.Where(cs => cs.ContestID == id).Include(cs => cs.Contest).Include(cs => cs.Problem).Include(cs => cs.Contestant).ToListAsync();
 
             return View(submissions);
+        }
 
+        public async Task<IActionResult> SubmissionsEdit(int? contestID, int? problemID, int? contestantID)
+        {
+            if (contestID == null || problemID == null || contestantID == null)
+            {
+                return NotFound();
+            }
+            return View(await _context.ContestSubmissions.Where(cs => cs.ContestID == contestID && cs.ProblemID == problemID && cs.ContestantID == contestantID).FirstAsync());
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> SubmissionsEdit([Bind("ContestID","ProblemID","ContestantID","Solution","Points","Contest","Problem","Contestant")] ContestSubmissions cs)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.ContestSubmissions.Update(cs);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return NotFound();
         }
     }
 }

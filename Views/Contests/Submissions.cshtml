@@ -22,10 +22,10 @@
                 @Html.DisplayNameFor(model => model.Contest)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Problem)
+                @Html.DisplayNameFor(model => model.Problem.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contestant)
+                @Html.DisplayNameFor(model => model.Contestant.FirstName)
             </th>
             <th></th>
         </tr>
@@ -43,15 +43,13 @@
                 @Html.DisplayFor(modelItem => item.Contest.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Problem.Description)
+                @Html.DisplayFor(modelItem => item.Problem.Title)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Contestant.FirstName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="SubmissionsEdit" asp-route-contestID="@item.ContestID" asp-route-problemID="@item.ProblemID" asp-route-contestantID="@item.ContestantID">Grade</a>
             </td>
         </tr>
 }

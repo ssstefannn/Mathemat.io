@@ -18,11 +18,11 @@ namespace Mathemat.io.Models
 
         public int Points { get; set; } = 0;
 
-        public Contest Contest { get; set; }
+        public Contest? Contest { get; set; }
 
-        public Problem Problem { get; set; }
+        public Problem? Problem { get; set; }
 
-        public Contestant Contestant { get; set; }
+        public Contestant? Contestant { get; set; }
 
 
     }

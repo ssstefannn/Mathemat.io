@@ -49,12 +49,12 @@
                 @Html.DisplayFor(modelItem => item.Duration)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ContestID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ContestID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ContestID">Delete</a> |
-                <a asp-action="Start" asp-route-id="@item.ContestID">Start</a> |
-                <a asp-action="Submissions" asp-route-id="@item.ContestID">Submissions</a> |
-                <a asp-action="Results" asp-route-id="@item.ContestID">Results</a>
+                <a class="btn btn-light" asp-action="Edit" asp-route-id="@item.ContestID">Edit</a> 
+                <a class="btn btn-light" asp-action="Details" asp-route-id="@item.ContestID">Details</a> 
+                <a class="btn btn-light" asp-action="Delete" asp-route-id="@item.ContestID">Delete</a> 
+                <a class="btn btn-light" asp-action="Start" asp-route-id="@item.ContestID">Start</a> 
+                <a class="btn btn-light" asp-action="Submissions" asp-route-id="@item.ContestID">Submissions</a> 
+                <a class="btn btn-light" asp-action="Results" asp-route-id="@item.ContestID">Results</a>
             </td>
         </tr>
 }

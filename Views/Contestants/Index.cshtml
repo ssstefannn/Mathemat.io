@@ -55,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.ContestantPoints)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ContestantID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ContestantID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ContestantID">Delete</a>
+                <a class="btn btn-light" asp-action="Edit" asp-route-id="@item.ContestantID">Edit</a> 
+                <a class="btn btn-light" asp-action="Details" asp-route-id="@item.ContestantID">Details</a> 
+                <a class="btn btn-light" asp-action="Delete" asp-route-id="@item.ContestantID">Delete</a>
             </td>
         </tr>
 }

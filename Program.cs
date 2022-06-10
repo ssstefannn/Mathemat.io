@@ -13,7 +13,10 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 builder.Services.AddRazorPages();
-builder.Services.AddIdentity<MathematioUser, IdentityRole>().AddEntityFrameworkStores<MathematioContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<MathematioUser, IdentityRole>().AddEntityFrameworkStores<MathematioContext>().AddDefaultTokenProviders()
+    .AddRoles<IdentityRole>()
+    .AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<MathematioUser,IdentityRole>>()
+    .AddSignInManager<SignInManager<MathematioUser>>();
 
 
 // Add services to the container.
@@ -30,7 +33,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     //Password settings
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 8;
-    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = false;
     options.Password.RequiredUniqueChars = 6;

@@ -20,11 +20,22 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contestants
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? fn,string? ln,string? country)
         {
-              return _context.Contestants != null ? 
-                          View(await _context.Contestants.ToListAsync()) :
-                          Problem("Entity set 'MathematioContext.Contestants'  is null.");
+            var contestantFilter = _context.Contestants.AsQueryable();
+            if (!string.IsNullOrEmpty(fn))
+            {
+                contestantFilter = contestantFilter.Where(c => c.FirstName.Contains(fn));
+            }
+            if (!string.IsNullOrEmpty(ln))
+            {
+                contestantFilter = contestantFilter.Where(c => c.LastName.Contains(ln));
+            }
+            if (!string.IsNullOrEmpty(country))
+            {
+                contestantFilter = contestantFilter.Where(c => c.Country.Equals(country));
+            }
+            return View(await contestantFilter.ToListAsync());
         }
 
         // GET: Contestants/Details/5

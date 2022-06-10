@@ -20,11 +20,23 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contests
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? title,int? difficulty,int? status)
         {
-            return _context.Contests != null ?
-                        View(await _context.Contests.ToListAsync()) :
-                        Problem("Entity set 'MathematioContext.Contests'  is null.");
+            var contestFilter = _context.Contests.AsQueryable();
+            if (!string.IsNullOrEmpty(title))
+            {
+                contestFilter = contestFilter.Where(c => c.Title.Contains(title));
+            }
+            if(difficulty != null)
+            {
+                contestFilter = contestFilter.Where(c => (int)c.Difficulty == difficulty);
+            }
+            if(status != null)
+            {
+                contestFilter = contestFilter.Where(c => (int)c.Status == status);
+            }
+
+            return View(await contestFilter.ToListAsync());
         }
 
         // GET: Contests/Details/5

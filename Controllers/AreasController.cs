@@ -20,11 +20,14 @@ namespace Mathematio.Controllers
         }
 
         // GET: Areas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? name)
         {
-              return _context.Areas != null ? 
-                          View(await _context.Areas.ToListAsync()) :
-                          Problem("Entity set 'MathematioContext.Areas'  is null.");
+            var areaFilter = _context.Areas.AsQueryable();
+            if (!string.IsNullOrEmpty(name))
+            {
+                areaFilter = areaFilter.Where(x => x.Name.Contains(name));
+            }
+            return View(await areaFilter.ToListAsync());
         }
 
         // GET: Areas/Details/5

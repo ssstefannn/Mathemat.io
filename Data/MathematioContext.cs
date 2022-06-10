@@ -1,9 +1,11 @@
 ﻿using Mathemat.io.Models;
+using Mathematio.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mathemat.io.Data
 {
-    public class MathematioContext : DbContext
+    public class MathematioContext : IdentityDbContext<MathematioUser>
     {
         public MathematioContext(DbContextOptions<MathematioContext> options) : base(options)
         {
@@ -33,7 +35,7 @@ namespace Mathemat.io.Data
             modelBuilder.Entity<ContestProblems>().HasKey(c => new { c.ContestID, c.ProblemID });
             modelBuilder.Entity<ContestSubmissions>().HasKey(c => new { c.ContestID, c.ProblemID, c.ContestantID });
 
-
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

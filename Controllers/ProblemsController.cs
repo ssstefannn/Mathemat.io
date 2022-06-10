@@ -44,6 +44,7 @@ namespace Mathematio.Controllers
                 var problemAreas = _context.ProblemAreas.Where(pa => pa.AreaID == areaID);
                 filteredProblems = problemAreas.Join<ProblemAreas,Problem,int,Problem>(filteredProblems, pa => pa.ProblemID, p => p.ProblemId,(pa,p)=>p);
             }
+            ViewBag.AreaList = new SelectList(_context.Areas.Select(a => a.Name).OrderBy(s => s));
               return _context.Problems != null ? 
                           View(await filteredProblems.ToListAsync()) :
                           Problem("Entity set 'MathematioContext.Problems'  is null.");

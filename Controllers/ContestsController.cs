@@ -35,7 +35,6 @@ namespace Mathematio.Controllers
             {
                 contestFilter = contestFilter.Where(c => (int)c.Status == status);
             }
-
             return View(await contestFilter.ToListAsync());
         }
 

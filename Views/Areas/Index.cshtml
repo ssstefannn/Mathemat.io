@@ -6,6 +6,12 @@
 
 <h1>Index</h1>
 
+<form asp-controller="Areas" asp-action="Index" method="get">
+    <label>Name:</label>
+    <input name="name"/>
+    <button class="btn btn-info" type="submit">Filter</button>
+</form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

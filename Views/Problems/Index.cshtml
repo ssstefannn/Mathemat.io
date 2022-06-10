@@ -6,6 +6,26 @@
 
 <h1>Index</h1>
 
+<form asp-controller="Problems" asp-action="Index" method="get">
+    <label>Title</label>
+    <input type="text" name="title"/>
+
+    <label>Difficulty</label>
+    <select name="difficulty">
+        <option value="">All</option>
+        <option value="0">Easy</option>
+        <option value="1">Medium</option>
+        <option value="2">Hard</option>
+    </select>
+
+    <label>Area</label>
+    <select name="areaName" asp-items="ViewBag.AreaList">
+        <option value="">All</option>
+    </select>
+
+    <button class="btn btn-info" type="submit">Filter</button>
+</form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

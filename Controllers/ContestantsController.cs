@@ -35,6 +35,8 @@ namespace Mathematio.Controllers
             {
                 contestantFilter = contestantFilter.Where(c => c.Country.Equals(country));
             }
+            var countryNames = _context.Contestants.GroupBy(c => c.Country).Select(g => g.Key).ToArray();
+            ViewBag.CountryList = new SelectList(countryNames);
             return View(await contestantFilter.ToListAsync());
         }
 

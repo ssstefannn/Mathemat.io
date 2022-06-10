@@ -278,7 +278,10 @@ namespace Mathematio.Controllers
         {
             if (ModelState.IsValid)
             {
+                var contestant = _context.Contestants.Where(c => c.ContestantID == cs.ContestantID).FirstOrDefault();
                 _context.ContestSubmissions.Update(cs);
+                contestant.ContestantPoints += cs.Points;
+                _context.Contestants.Update(contestant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

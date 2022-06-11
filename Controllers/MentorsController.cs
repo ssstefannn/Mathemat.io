@@ -35,8 +35,7 @@ namespace Mathematio.Controllers
             {
                 mentorFilter = mentorFilter.Where(c => c.Country.Equals(country));
             }
-            var countryNames = _context.Mentors.GroupBy(c => c.Country).Select(g => g.Key).ToArray();
-            ViewBag.CountryList = new SelectList(countryNames);
+            ViewBag.CountryList = new SelectList(_context.Mentors.GroupBy(c => c.Country).Select(g => g.Key));
             return View(await mentorFilter.ToListAsync());
         }
 

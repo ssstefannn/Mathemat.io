@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Mathemat.io.Data;
 using Mathemat.io.Models;
+using Mathematio.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Mathematio.Controllers
 {
     public class ContestantsController : Controller
     {
         private readonly MathematioContext _context;
+        public IServiceProvider _serviceProvider;
 
-        public ContestantsController(MathematioContext context)
+        public ContestantsController(MathematioContext context, IServiceProvider serviceProvider)
         {
             _context = context;
+            _serviceProvider = serviceProvider;
         }
 
         // GET: Contestants
@@ -75,6 +79,15 @@ namespace Mathematio.Controllers
             {
                 _context.Add(contestant);
                 await _context.SaveChangesAsync();
+                var UserManager = _serviceProvider.GetRequiredService<UserManager<MathematioUser>>();
+                var User = new MathematioUser();
+                User.Email = "contestant" + contestant.ContestantID + "@mathemat.io";
+                User.UserName = "contestant" + contestant.ContestantID + "@mathemat.io";
+                User.LinkId = contestant.ContestantID;
+                User.EmailConfirmed = true;
+                string userPWD = "Contestant" + contestant.ContestantID;
+                IdentityResult chkUser = await UserManager.CreateAsync(User, userPWD);
+                if (chkUser.Succeeded) { var result1 = await UserManager.AddToRoleAsync(User, "Contestant"); }
                 return RedirectToAction(nameof(Index));
             }
             return View(contestant);

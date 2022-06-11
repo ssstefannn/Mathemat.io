@@ -19,12 +19,24 @@ namespace Mathematio.Models
                 roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
             }
 
-            MathematioUser user = await UserManager.FindByEmailAsync("admin@mathematio.com");
+            roleCheck = await RoleManager.RoleExistsAsync("Mentor");
+            if (!roleCheck) 
+            { 
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Mentor")); 
+            }
+
+            roleCheck = await RoleManager.RoleExistsAsync("Contestant");
+            if (!roleCheck) 
+            { 
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Contestant")); 
+            }
+
+            MathematioUser user = await UserManager.FindByEmailAsync("admin@mathemat.io");
             if (user == null)
             {
                 var User = new MathematioUser();
-                User.Email = "admin@mathematio.com";
-                User.UserName = "admin@mathematio.com";
+                User.Email = "admin@mathemat.io";
+                User.UserName = "admin@mathemat.io";
                 string userPWD = "Admin123";
                 IdentityResult chkUser = await UserManager.CreateAsync(User, userPWD);
                 //Add default User to Role Admin

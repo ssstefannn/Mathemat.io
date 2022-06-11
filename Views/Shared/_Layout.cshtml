@@ -29,12 +29,6 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home Page</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Areas" asp-action="Index">Areas</a>
                         </li>
                         <li class="nav-item">
@@ -69,9 +63,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <link rel="stylesheet" href="~/Chosen/chosen_v1.8.7/chosen.css"/>
-    <script src="~/Chosen/chosen_v1.8.7/chosen.jquery.js"></script>
-    <script src="~/Chosen/chosen_v1.8.7/chosen.jquery.min.js"></script>
+    <link href="https://harvesthq.github.io/chosen/chosen.css" rel="stylesheet" />
+    <script src="https://harvesthq.github.io/chosen/chosen.jquery.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
 $("select").chosen();

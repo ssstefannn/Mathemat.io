@@ -47,7 +47,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="JudgeIDs" class="control-label"></label>
-                <select asp-for="JudgeIDs" class="form-control" asp-items="ViewBag.Judges">
+                <select asp-for="JudgeIDs" multiple class="form-control select-chosen" asp-items="ViewBag.Judges">
                 </select>
                 <span asp-validation-for="JudgeIDs" class="text-danger"></span>
             </div>
@@ -73,6 +73,8 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

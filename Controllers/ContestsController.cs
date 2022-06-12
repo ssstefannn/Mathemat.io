@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Mathemat.io.Data;
 using Mathemat.io.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mathematio.Controllers
 {
@@ -57,6 +58,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contests/Create
+        [Authorize(Roles = "Admin,Mentor")]
         public IActionResult Create()
         {
             ViewBag.Judges = new SelectList(_context.Set<Mentor>(), "MentorID", "FirstName");
@@ -70,6 +72,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Create([Bind("ContestID,Title,Difficulty,StartDate,Status,Duration,JudgeIDs,ProblemIDs,ParticipantIDs")] Contest contest)
         {
             if (ModelState.IsValid)
@@ -104,6 +107,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contests/Edit/5
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Contests == null)
@@ -124,6 +128,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Edit(int id, [Bind("ContestID,Title,Difficulty,StartDate,Status,Duration")] Contest contest)
         {
             if (id != contest.ContestID)
@@ -155,6 +160,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contests/Delete/5
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Contests == null)
@@ -175,6 +181,7 @@ namespace Mathematio.Controllers
         // POST: Contests/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Contests == null)
@@ -195,6 +202,7 @@ namespace Mathematio.Controllers
         {
             return (_context.Contests?.Any(e => e.ContestID == id)).GetValueOrDefault();
         }
+
 
         public async Task<IActionResult> Start(int? id)
         {
@@ -263,6 +271,7 @@ namespace Mathematio.Controllers
             return uniqueFileName;
         }
 
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Submissions(int? id)
         {
             if (id == null)
@@ -275,6 +284,7 @@ namespace Mathematio.Controllers
             return View(submissions);
         }
 
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> SubmissionsEdit(int? contestID, int? problemID, int? contestantID)
         {
             if (contestID == null || problemID == null || contestantID == null)
@@ -285,6 +295,7 @@ namespace Mathematio.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> SubmissionsEdit([Bind("ContestID","ProblemID","ContestantID","Solution","Points","Contest","Problem","Contestant")] ContestSubmissions cs)
         {
             if (ModelState.IsValid)

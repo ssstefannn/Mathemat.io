@@ -9,6 +9,7 @@ using Mathemat.io.Data;
 using Mathemat.io.Models;
 using Mathematio.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mathematio.Controllers
 {
@@ -63,6 +64,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contestants/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -73,6 +75,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("ContestantID,FirstName,LastName,Country,BirthDate,School,ContestantPoints")] Contestant contestant)
         {
             if (ModelState.IsValid)
@@ -94,6 +97,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contestants/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Contestants == null)
@@ -114,6 +118,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("ContestantID,FirstName,LastName,Country,BirthDate,School,ContestantPoints")] Contestant contestant)
         {
             if (id != contestant.ContestantID)
@@ -145,6 +150,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Contestants/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Contestants == null)
@@ -165,6 +171,7 @@ namespace Mathematio.Controllers
         // POST: Contestants/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Contestants == null)

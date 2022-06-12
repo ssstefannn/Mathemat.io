@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Mathemat.io.Data;
 using Mathemat.io.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mathematio.Controllers
 {
@@ -71,6 +72,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Problems/Create
+        [Authorize(Roles = "Admin,Mentor")]
         public IActionResult Create()
         {
             ViewBag.Areas = new SelectList(_context.Set<Area>(), "AreaID", "Name");
@@ -83,6 +85,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Create([Bind("ProblemId,Title,Difficulty,Description,DateAdded,AreaIDs,AuthorIDs")] Problem problem)
         {
             if (ModelState.IsValid)
@@ -112,6 +115,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Problems/Edit/5
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Problems == null)
@@ -132,6 +136,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Edit(int id, [Bind("ProblemId,Title,Difficulty,Description,DateAdded")] Problem problem)
         {
             if (id != problem.ProblemId)
@@ -163,6 +168,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Problems/Delete/5
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Problems == null)
@@ -183,6 +189,7 @@ namespace Mathematio.Controllers
         // POST: Problems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Mentor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Problems == null)

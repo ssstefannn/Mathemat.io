@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Mathemat.io.Data;
 using Mathemat.io.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mathematio.Controllers
 {
@@ -49,6 +50,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Areas/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -59,6 +61,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("AreaID,Name,Description")] Area area)
         {
             if (ModelState.IsValid)
@@ -71,6 +74,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Areas/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Areas == null)
@@ -91,6 +95,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("AreaID,Name,Description")] Area area)
         {
             if (id != area.AreaID)
@@ -122,6 +127,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Areas/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Areas == null)
@@ -140,6 +146,7 @@ namespace Mathematio.Controllers
         }
 
         // POST: Areas/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

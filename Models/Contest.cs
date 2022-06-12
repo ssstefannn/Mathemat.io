@@ -16,7 +16,8 @@ namespace Mathemat.io.Models
         {
             NotStarted,
             InProgress,
-            Finished
+            Finished,
+            ResultsOut
         }
 
         [Key]

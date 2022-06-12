@@ -9,6 +9,7 @@ using Mathemat.io.Data;
 using Mathemat.io.Models;
 using Microsoft.AspNetCore.Identity;
 using Mathematio.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mathematio.Controllers
 {
@@ -62,6 +63,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Mentors/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -72,6 +74,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("MentorID,FirstName,LastName,Country,BirthDate,Profession,MentorPoints")] Mentor mentor)
         {
             if (ModelState.IsValid)
@@ -94,6 +97,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Mentors/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Mentors == null)
@@ -115,6 +119,7 @@ namespace Mathematio.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("MentorID,FirstName,LastName,Country,BirthDate,Profession,MentorPoints,ContestantIDs")] Mentor mentor)
         {
             if (id != mentor.MentorID)
@@ -154,6 +159,7 @@ namespace Mathematio.Controllers
         }
 
         // GET: Mentors/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Mentors == null)
@@ -174,6 +180,7 @@ namespace Mathematio.Controllers
         // POST: Mentors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Mentors == null)

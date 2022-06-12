@@ -8,21 +8,41 @@ using Microsoft.EntityFrameworkCore;
 using Mathemat.io.Data;
 using Mathemat.io.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Mathematio.Areas.Identity.Data;
 
 namespace Mathematio.Controllers
 {
     public class ContestsController : Controller
     {
         private readonly MathematioContext _context;
+        public IServiceProvider _serviceProvider;
 
-        public ContestsController(MathematioContext context)
+        public ContestsController(MathematioContext context,IServiceProvider serviceProvider)
         {
             _context = context;
+            _serviceProvider = serviceProvider;
         }
 
         // GET: Contests
         public async Task<IActionResult> Index(string? title,int? difficulty,int? status)
         {
+            var contests = _context.Contests.ToList();
+            contests = contests.Select(c =>
+            {
+                DateTime sd = c.StartDate;
+                if (DateTime.Now.CompareTo(sd) > 0 && DateTime.Now.CompareTo(sd.AddMinutes(c.Duration)) < 0)
+                {
+                    c.Status = Contest.StatusLevel.InProgress;
+                }
+                if (DateTime.Now.CompareTo(sd.AddMinutes(c.Duration)) > 0 && c.Status!=Contest.StatusLevel.ResultsOut)
+                {
+                    c.Status = Contest.StatusLevel.Finished;
+                }
+                _context.Contests.Update(c);
+                _context.SaveChanges();
+                return c;
+            }).ToList();
             var contestFilter = _context.Contests.AsQueryable();
             if (!string.IsNullOrEmpty(title))
             {
@@ -61,6 +81,8 @@ namespace Mathematio.Controllers
         [Authorize(Roles = "Admin,Mentor")]
         public IActionResult Create()
         {
+            //var userService = _serviceProvider.GetRequiredService<UserManager<MathematioUser>>();
+            //var user = userService.GetUserAsync(HttpContext.User);
             ViewBag.Judges = new SelectList(_context.Set<Mentor>(), "MentorID", "FirstName");
             ViewBag.Problems = new SelectList(_context.Set<Problem>(), "ProblemId", "Title");
             ViewBag.Participants = new SelectList(_context.Set<Contestant>(), "ContestantID", "FirstName");
@@ -210,7 +232,18 @@ namespace Mathematio.Controllers
             {
                 return NotFound();
             }
-
+            var userManager = _serviceProvider.GetRequiredService<UserManager<MathematioUser>>();
+            var userID = userManager.FindByNameAsync(User.Identity.Name).Result.LinkId;
+            if(!_context.Participants.Any(p=>p.ContestID==id && p.ContestantID == userID))
+            {
+                return NotFound();
+            }
+            var contest = _context.Contests.Find(id);
+            if(contest.Status != Contest.StatusLevel.InProgress)
+            {
+                return NotFound();
+            }
+            ViewBag.Contest = _context.Contests.Find(id);
             var problems = await _context.ContestProblems.Where(cp => cp.ContestID == id).Select(cp => cp.Problem).ToListAsync<Problem>();
             return View(problems);
 
@@ -240,12 +273,14 @@ namespace Mathematio.Controllers
                 string uniqueFileName = UploadedFile(submission);
                 submission.Solution = uniqueFileName;
             }
-            submission.ContestantID = 1;
+            var userManager = _serviceProvider.GetRequiredService<UserManager<MathematioUser>>();
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            submission.ContestantID = user.LinkId;
             await _context.ContestSubmissions.AddAsync(submission);
             await _context.SaveChangesAsync();
 
             var uri = "Contests";
-            return RedirectToAction(nameof(Index));
+            return RedirectToRoute(new { controller = "Contests", action = "Start", id=submission.ContestID });
 
         }
 
@@ -279,6 +314,14 @@ namespace Mathematio.Controllers
                 return NotFound();
             }
 
+            var userManager = _serviceProvider.GetRequiredService<UserManager<MathematioUser>>();
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            var userID = user.LinkId;
+            if (!_context.ContestJudges.Any(cj => cj.ContestID == id && cj.MentorID == userID))
+            {
+                return NotFound();
+            }
+
             var submissions = await _context.ContestSubmissions.Where(cs => cs.ContestID == id).Include(cs => cs.Contest).Include(cs => cs.Problem).Include(cs => cs.Contestant).ToListAsync();
 
             return View(submissions);
@@ -305,7 +348,7 @@ namespace Mathematio.Controllers
                 contestant.ContestantPoints += cs.Points;
                 _context.Contestants.Update(contestant);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToRoute(new { controller = "Contests", action = "Submissions", id=cs.ContestID });
             }
 
             return NotFound();
@@ -317,7 +360,12 @@ namespace Mathematio.Controllers
             {
                 return NotFound();
             }
-            var test = _context.ContestSubmissions.Where(cs => cs.ContestID == id).ToList().GroupBy(li => li.ContestantID).Select(ge => new ContestSubmissions
+            var contest = _context.Contests.Find(id);
+            if (contest.Status != Contest.StatusLevel.ResultsOut)
+            {
+                return NotFound();
+            }
+            var results = _context.ContestSubmissions.Where(cs => cs.ContestID == id).ToList().GroupBy(li => li.ContestantID).Select(ge => new ContestSubmissions
             {
                 ContestID = (int)id,
                 ProblemID = 0,
@@ -325,7 +373,23 @@ namespace Mathematio.Controllers
                 Contestant = _context.Contestants.Where(c=>c.ContestantID == ge.Key).First(),
                 Points = ge.Select(submission => submission.Points).Sum()
             }).OrderBy(cs => -1*cs.Points); 
-            return View(test);
+            return View(results);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,Mentor")]
+        public async Task<IActionResult> ResultsOut(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var contest = _context.Contests.Find(id);
+            contest.Status = Contest.StatusLevel.ResultsOut;
+            _context.Contests.Update(contest);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

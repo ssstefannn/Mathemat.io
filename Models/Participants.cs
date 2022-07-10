@@ -2,9 +2,6 @@
 {
     public class Participants
     {
-        public int ContestID { get; set; }
-
-        public int ContestantID { get; set; }
 
         public Contest Contest { get; set; }
 

@@ -27,14 +27,12 @@ namespace Mathemat.io.Models
 
         public int MentorPoints { get; set; } = 0;
 
-        public IEnumerable<Mentorship>? Contestants { get; set; }
 
-        public IEnumerable<ContestJudges>? Contests { get; set; }
+        public ICollection<Contest> ContestsOrganized { get; set; }
 
-        public IEnumerable<ProblemAuthors>? Problems { get; set; }
+        public ICollection<Contest> ContestsParticipated { get; set; }
 
-        [NotMapped]
-        public IEnumerable<int>? ContestantIDs { get; set; }
+        public ICollection<Contestant> Contestants { get; set; }
 
     }
 }

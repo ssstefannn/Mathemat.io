@@ -27,15 +27,9 @@ namespace Mathemat.io.Models
         [DataType(DataType.DateTime)]
         public DateTime DateAdded { get; set; }
 
-        public IEnumerable<ProblemAreas>? Areas { get; set; }
+        public ICollection<Area> Areas { get; set; }
 
-        public IEnumerable<ProblemAuthors>? Authors { get; set; }
-
-        [NotMapped]
-        public IEnumerable<int>? AreaIDs { get; set; }
-
-        [NotMapped]
-        public IEnumerable<int>? AuthorIDs { get; set; }
+        public ICollection<Mentor> Authors { get; set; }
 
 
     }

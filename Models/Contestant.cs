@@ -26,9 +26,9 @@ namespace Mathemat.io.Models
 
         public int ContestantPoints { get; set; } = 0;
 
-        public IEnumerable<Participants>? Contests { get; set; }
+        public ICollection<Contest> Contests { get; set; }
 
-        public IEnumerable<Mentorship>? Mentors { get; set; }
+        public ICollection<Mentor> Mentors { get; set; }
 
 
     }

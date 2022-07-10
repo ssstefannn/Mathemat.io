@@ -38,10 +38,6 @@ namespace Mathemat.io.Models
 
         public int Duration { get; set; }
 
-        public IEnumerable<ContestJudges>? Judges { get; set; }
-
-        public IEnumerable<Participants>? Participants { get; set; }
-
         [NotMapped]
         public IEnumerable<int>? JudgeIDs { get; set; }
 
@@ -50,6 +46,12 @@ namespace Mathemat.io.Models
 
         [NotMapped]
         public IEnumerable<int>? ParticipantIDs { get; set; }
+
+        public ICollection<Mentor> Judges { get; set; }
+
+        public ICollection<Contestant> Participants { get; set; }
+
+        public ICollection<Problem> Problems { get; set; }
 
 
 

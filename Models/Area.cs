@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mathemat.io.Models
 {
@@ -15,7 +16,7 @@ namespace Mathemat.io.Models
         [StringLength(100)]
         public string Description { get;set; } = String.Empty;
 
-        public IEnumerable<ProblemAreas>? Problems { get; set; }
+        public ICollection<Problem> Problems { get; set; }
 
     }
 }
